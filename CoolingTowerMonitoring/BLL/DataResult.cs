@@ -8,7 +8,7 @@ namespace CoolingTowerMonitoring.BLL
 {
     public class DataResult<T>
     {
-        public bool State { get; set; }
+        public bool State { get; set; } = false;
         public string Message { get; set; }
         public int MyProperty { get; set; }
         public T Data { get; set; }
