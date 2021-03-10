@@ -128,6 +128,9 @@ namespace CoolingTowerMonitoring.BLL
                         };
                     }
                 }
+
+                result.State = true;
+                result.Data = deviceModels;
             }
             catch (Exception ex)
             {

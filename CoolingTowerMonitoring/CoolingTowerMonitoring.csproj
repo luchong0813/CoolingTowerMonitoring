@@ -64,6 +64,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Base\GlobalMonitor.cs" />
     <Compile Include="Base\MonitorValueStateEnum.cs" />
     <Compile Include="BLL\DataResult.cs" />
     <Compile Include="BLL\IndustrialBLL.cs" />
