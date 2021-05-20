@@ -10,14 +10,18 @@ namespace Communication.Modbus
     //单例
     public class RTU
     {
+        private Action<int, List<byte>> ResponseData;
+
         private static RTU _instance;
         private static SerialInfo _serialInfo;
 
         SerialPort _serialPort;
-        bool _isBusing;
+        bool _isBusing;  //是否忙碌
 
         int _currentSlave;
         int _wordLen;
+        int _funcCode;
+        int _startAddr;
 
         public RTU(SerialInfo serialInfo)
         {
@@ -93,11 +97,18 @@ namespace Communication.Modbus
                     return;
                 }
             }
+
+            if (_byteBuffer[0] == (byte)_currentSlave && _byteBuffer[1] == _funcCode && _receiveByteCount >= _wordLen + 5)
+            {
+                ResponseData?.Invoke(_startAddr, new List<byte>(SubByteArray(_byteBuffer, 0, _wordLen + 3)));
+            }
         }
 
         public async Task<bool> Send(int salveAddr, byte funcCode, int startAddr, int len)
         {
             _currentSlave = salveAddr;
+            _funcCode = funcCode;
+            _startAddr = startAddr;
             if (funcCode == 0x01)
                 _wordLen = len / 8 + ((len % 8 > 0) ? 1 : 0);
             if (funcCode == 0x03)
@@ -128,6 +139,23 @@ namespace Communication.Modbus
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 截取Byte数组
+        /// </summary>
+        /// <returns></returns>
+        private byte[] SubByteArray(byte[] data, int start, int len)
+        {
+            byte[] Res = new byte[len];
+            if (data != null && data.Length > len)
+            {
+                for (int i = 0; i < len; i++)
+                {
+                    Res[i] = data[i + start];
+                }
+            }
+            return Res;
         }
 
         #region  CRC校验

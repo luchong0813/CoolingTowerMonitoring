@@ -11,6 +11,7 @@ namespace CoolingTowerMonitoring.Model
     {
         public string DeviceId { get; set; }
         public string DeviceName { get; set; }
+        public bool IsRuning { get; set; }
         public bool IsWarning { get; set; } = false;
         public ObservableCollection<MonitorValueModel> MonitorValueList { get; set; } = new ObservableCollection<MonitorValueModel>();
 
